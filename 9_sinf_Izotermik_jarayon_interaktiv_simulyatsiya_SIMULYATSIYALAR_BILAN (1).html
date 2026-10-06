@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9-sinf: Izotermik jarayon va interaktiv simulyatsiya</title>
+<style>
+:root{--primary:#2c3e50;--secondary:#2980b9;--accent:#e74c3c;--bg:#f4f7f6;--card-bg:#fff}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;background:var(--bg);color:#333;margin:0;padding:20px}
+.container{max-width:1000px;margin:0 auto}
+h1{text-align:center;color:var(--primary);border-bottom:3px solid var(--secondary);padding-bottom:10px}
+h2{color:var(--primary)}
+.section{background:var(--card-bg);padding:25px;margin-bottom:25px;border-radius:10px;box-shadow:0 4px 6px rgba(0,0,0,.1)}
+.simulation-container{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;background:#eef2f5;padding:20px;border-radius:10px}
+canvas{background:#fff;border:2px solid var(--primary);border-radius:8px;max-width:100%;height:auto}
+.controls{flex:1;min-width:260px;display:flex;flex-direction:column;gap:15px}
+.control-group{display:flex;flex-direction:column}
+label{font-weight:bold;margin-bottom:5px}
+input[type=range]{width:100%;cursor:pointer}
+.data-display{background:var(--primary);color:#fff;padding:15px;border-radius:8px;font-family:'Courier New',monospace;font-size:1.05em}
+.formula{background:#e8f4f8;border-left:5px solid var(--secondary);padding:10px 15px;font-size:1.1em;margin:10px 0}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #ddd;padding:10px;text-align:left}
+th{background:var(--secondary);color:white}
+tr:nth-child(even){background:#f9f9f9}
+@media(max-width:700px){body{padding:10px}.section{padding:15px}.simulation-container{padding:10px}}
+
+.sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.sim-card{background:#fff;border:1px solid #d8e1e8;border-radius:12px;padding:16px;box-shadow:0 3px 8px rgba(0,0,0,.07)}
+.sim-card h3{margin-top:0;color:#2c3e50}
+.sim-card canvas{width:100%;max-width:360px;display:block;margin:auto}
+.sim-btn{border:0;border-radius:8px;padding:10px 14px;background:#2980b9;color:#fff;font-weight:600;cursor:pointer;margin:4px}
+.sim-btn:hover{filter:brightness(.95)}
+.sim-readout{background:#f3f7fa;border-left:4px solid #2980b9;padding:10px;border-radius:6px;margin-top:10px}
+.sim-note{background:#fff8e6;border-left:4px solid #f39c12;padding:10px;border-radius:6px}
+
+</style>
+</head>
+<body>
+<div class="container">
+<h1>9-Sinf Fizika: Izotermik Jarayon</h1>
+
+<div class="section">
+<h2>1. Izotermik jarayon haqida</h2>
+<p><strong>Izotermik jarayon</strong> — berilgan massali ideal gazda harorat o‘zgarmas bo‘lgan holda (T = const) kechadigan gaz holatining o‘zgarish jarayonidir.</p>
+<div class="formula"><strong>Boyl-Mariott qonuni:</strong> P · V = const &nbsp;yoki&nbsp; P₁ · V₁ = P₂ · V₂</div>
+<p><strong>Asosiy xususiyatlari:</strong></p>
+<ul>
+<li>Gaz hajmi (V) ortganda, uning bosimi (P) kamayadi va aksincha.</li>
+<li>Harorat o‘zgarmas qolishi uchun issiqlik almashinuvi yetarlicha sekin amalga oshishi kerak.</li>
+<li>Izotermik jarayon P-V koordinata tekisligida <strong>izoterma</strong> deb ataluvchi giperboladir.</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Interaktiv Simulyatsiya: Boyl-Mariott Qonuni</h2>
+<div class="simulation-container">
+<div><canvas id="pistonCanvas" width="300" height="300"></canvas></div>
+<div><canvas id="graphCanvas" width="300" height="300"></canvas></div>
+<div class="controls">
+<div class="control-group">
+<label for="volumeSlider">Gaz hajmi (V): <span id="vVal">50</span> nisbiy birlik</label>
+<input type="range" id="volumeSlider" min="25" max="90" value="50">
+</div>
+<div class="data-display">
+<div>Harorat (T): <span style="color:#2ecc71;">300 K (o‘zgarmas)</span></div>
+<div>Hajm (V): <span id="dispV">50</span></div>
+<div>Bosim (P): <span id="dispP">2.00</span> atm</div>
+<div>P · V ko‘paytma: <span id="dispPV">100</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>2. Gazlarning umumiy izojarayonlari</h2>
+<p>Ideal gaz holat tenglamasi (P · V / T = const) asosida uchta asosiy izojarayon farqlanadi:</p>
+<table>
+<thead><tr><th>Jarayon nomi</th><th>O‘zgarmas kattalik</th><th>Matematik ifodasi</th><th>Qonun nomi</th></tr></thead>
+<tbody>
+<tr><td><strong>Izotermik</strong></td><td>Harorat (T = const)</td><td>P · V = const</td><td>Boyl-Mariott qonuni</td></tr>
+<tr><td><strong>Izobarik</strong></td><td>Bosim (P = const)</td><td>V / T = const</td><td>Gey-Lussak qonuni</td></tr>
+<tr><td><strong>Izoxorik</strong></td><td>Hajm (V = const)</td><td>P / T = const</td><td>Sharl qonuni</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>3. Qo‘shimcha interaktiv simulyatsiyalar</h2>
+<p>Quyidagi uchta simulyatsiya gazlarning asosiy izojarayonlarini ko‘rgazmali ravishda tekshirishga yordam beradi.</p>
+
+<div class="sim-grid">
+
+<div class="sim-card">
+<h3>1) Izotermik jarayon — T = const</h3>
+<p>Hajmni o‘zgartiring. Bosim avtomatik ravishda Boyl–Mariott qonuni bo‘yicha o‘zgaradi.</p>
+<canvas id="isoTCanvas" width="360" height="230"></canvas>
+<label for="isoTVol"><strong>V:</strong> <span id="isoTVolVal">50</span> birlik</label>
+<input id="isoTVol" type="range" min="20" max="100" value="50" style="width:100%">
+<div class="sim-readout">
+P = <strong id="isoTP">2.00</strong> birlik<br>
+P · V = <strong id="isoTPV">100.00</strong> — doimiy
+</div>
+</div>
+
+<div class="sim-card">
+<h3>2) Izobarik jarayon — P = const</h3>
+<p>Harorat oshirilganda hajm qanday o‘zgarishini kuzating.</p>
+<canvas id="isoPCanvas" width="360" height="230"></canvas>
+<label for="isoPT"><strong>T:</strong> <span id="isoPTVal">300</span> K</label>
+<input id="isoPT" type="range" min="200" max="600" value="300" style="width:100%">
+<div class="sim-readout">
+P = <strong>1.00</strong> birlik<br>
+V = <strong id="isoPV">50.00</strong> birlik<br>
+V / T = <strong id="isoPVT">0.1667</strong>
+</div>
+</div>
+
+<div class="sim-card">
+<h3>3) Izoxorik jarayon — V = const</h3>
+<p>Hajm o‘zgarmas bo‘lganda harorat oshishi bilan bosimning o‘zgarishini kuzating.</p>
+<canvas id="isoVCanvas" width="360" height="230"></canvas>
+<label for="isoVT"><strong>T:</strong> <span id="isoVTVal">300</span> K</label>
+<input id="isoVT" type="range" min="200" max="600" value="300" style="width:100%">
+<div class="sim-readout">
+V = <strong>50.00</strong> birlik<br>
+P = <strong id="isoVP">1.00</strong> birlik<br>
+P / T = <strong id="isoVPT">0.00333</strong>
+</div>
+</div>
+
+</div>
+
+<div class="sim-note" style="margin-top:18px">
+<strong>Tekshirish:</strong> Izotermikda T o‘zgarmaydi; izobarikda P o‘zgarmaydi; izoxorikda V o‘zgarmaydi.
+O‘quvchilar slayderlarni surib, formulalardagi bog‘lanishlarni mustaqil kuzatishlari mumkin.
+</div>
+</div>
+
+<div class="section">
+<h2>4. Darsda qo‘llanilishi va metodik tavsiyalar</h2>
+<p>Ushbu interaktiv materialdan 9-sinf fizika darslarida quyidagi bosqichlarda foydalanish tavsiya etiladi:</p>
+<ol>
+<li><strong>Yangi mavzuni tushuntirishda:</strong>
+<ul><li>O‘quvchilarga porshen pastga tushirilganda molekulalar zichligi ortishi va devorga urilishlar ko‘payib bosim oshishini ko‘rsatish.</li></ul></li>
+<li><strong>Mavzuni mustahkamlashda:</strong>
+<ul><li>Slayderni surish orqali P · V ko‘paytma har doim 100 ga teng bo‘lib qolishini o‘quvchilar bilan hisoblab chiqish.</li></ul></li>
+<li><strong>Muammoli topshiriq:</strong>
+<ul><li><em>“Hajm 2 barobar kamaysa, bosim necha barobar ortadi?”</em> savoli berilib, simulyatsiyada tekshiriladi.</li></ul></li>
+</ol>
+</div>
+</div>
+
+<script>
+const pCanvas=document.getElementById('pistonCanvas'),pCtx=pCanvas.getContext('2d');
+const gCanvas=document.getElementById('graphCanvas'),gCtx=gCanvas.getContext('2d');
+const volumeSlider=document.getElementById('volumeSlider');
+const vValSpan=document.getElementById('vVal'),dispV=document.getElementById('dispV');
+const dispP=document.getElementById('dispP'),dispPV=document.getElementById('dispPV');
+const CONST_PV=100,numParticles=50;
+let particles=[];
+for(let i=0;i<numParticles;i++){
+particles.push({x:Math.random()*200+50,y:Math.random()*100+150,
+vx:(Math.random()-.5)*3,vy:(Math.random()-.5)*3});
+}
+function animate(){
+const v=parseFloat(volumeSlider.value),p=CONST_PV/v;
+vValSpan.textContent=v;dispV.textContent=v;dispP.textContent=p.toFixed(2);dispPV.textContent=(v*p).toFixed(0);
+pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
+const left=40,right=260,bottom=260,cylinderHeight=v*2.2,top=bottom-cylinderHeight;
+pCtx.strokeStyle='#2c3e50';pCtx.lineWidth=4;pCtx.beginPath();
+pCtx.moveTo(left,30);pCtx.lineTo(left,bottom);pCtx.lineTo(right,bottom);pCtx.lineTo(right,30);pCtx.stroke();
+pCtx.fillStyle='#7f8c8d';pCtx.fillRect(left+2,top-10,right-left-4,12);
+pCtx.beginPath();pCtx.moveTo((left+right)/2,top-10);pCtx.lineTo((left+right)/2,10);pCtx.stroke();
+pCtx.fillStyle='#e74c3c';
+particles.forEach(pt=>{
+pt.x+=pt.vx;pt.y+=pt.vy;
+if(pt.x<=left+6){pt.x=left+6;pt.vx*=-1}
+if(pt.x>=right-6){pt.x=right-6;pt.vx*=-1}
+if(pt.y>=bottom-6){pt.y=bottom-6;pt.vy*=-1}
+if(pt.y<=top+6){pt.y=top+6;pt.vy*=-1}
+pCtx.beginPath();pCtx.arc(pt.x,pt.y,4,0,Math.PI*2);pCtx.fill();
+});
+pCtx.fillStyle='#333';pCtx.font='14px Arial';pCtx.fillText('Porshenli silindr',95,288);
+gCtx.clearRect(0,0,gCanvas.width,gCanvas.height);
+gCtx.strokeStyle='#333';gCtx.lineWidth=2;gCtx.beginPath();
+gCtx.moveTo(40,20);gCtx.lineTo(40,260);gCtx.lineTo(280,260);gCtx.stroke();
+gCtx.fillStyle='#333';gCtx.font='12px Arial';gCtx.fillText('P (Bosim)',10,20);gCtx.fillText('V (Hajm)',230,280);
+gCtx.strokeStyle='#2980b9';gCtx.lineWidth=3;gCtx.beginPath();
+for(let vol=25;vol<=90;vol+=1){
+let press=CONST_PV/vol,x=40+(vol-25)*(220/65),y=260-(press-1.1)*(220/3);
+if(vol===25)gCtx.moveTo(x,y);else gCtx.lineTo(x,y);
+}
+gCtx.stroke();
+let currentX=40+(v-25)*(220/65),currentY=260-(p-1.1)*(220/3);
+gCtx.fillStyle='#e74c3c';gCtx.beginPath();gCtx.arc(currentX,currentY,6,0,Math.PI*2);gCtx.fill();
+requestAnimationFrame(animate);
+}
+animate();
+// Qo‘shimcha izojarayonlar simulyatsiyalari
+(function(){
+  const get = id => document.getElementById(id);
+  const drawAxes = (ctx, w, h, xLabel, yLabel) => {
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle="#333"; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(42,18); ctx.lineTo(42,h-35); ctx.lineTo(w-18,h-35); ctx.stroke();
+    ctx.fillStyle="#333"; ctx.font="12px Arial";
+    ctx.fillText(yLabel,6,18); ctx.fillText(xLabel,w-45,h-12);
+  };
+
+  // Izotermik
+  const tCanvas=get("isoTCanvas"), tCtx=tCanvas.getContext("2d"), tSlider=get("isoTVol");
+  function drawIsoT(){
+    const V=+tSlider.value, P=100/V;
+    get("isoTVolVal").textContent=V;
+    get("isoTP").textContent=P.toFixed(2);
+    get("isoTPV").textContent=(P*V).toFixed(2);
+    drawAxes(tCtx,360,230,"V","P");
+    tCtx.strokeStyle="#2980b9"; tCtx.lineWidth=3; tCtx.beginPath();
+    for(let v=20;v<=100;v++){
+      const p=100/v, x=45+(v-20)*2.9, y=195-(p-1)*22;
+      if(v===20)tCtx.moveTo(x,y); else tCtx.lineTo(x,y);
+    }
+    tCtx.stroke();
+    const x=45+(V-20)*2.9, y=195-(P-1)*22;
+    tCtx.fillStyle="#e74c3c"; tCtx.beginPath(); tCtx.arc(x,y,6,0,Math.PI*2); tCtx.fill();
+  }
+  tSlider.addEventListener("input",drawIsoT); drawIsoT();
+
+  // Izobarik
+  const pCanvas=get("isoPCanvas"), pCtx2=pCanvas.getContext("2d"), pSlider=get("isoPT");
+  function drawIsoP(){
+    const T=+pSlider.value, V=50*T/300;
+    get("isoPTVal").textContent=T;
+    get("isoPV").textContent=V.toFixed(2);
+    get("isoPVT").textContent=(V/T).toFixed(4);
+    drawAxes(pCtx2,360,230,"T","V");
+    pCtx2.strokeStyle="#27ae60"; pCtx2.lineWidth=3; pCtx2.beginPath();
+    for(let temp=200;temp<=600;temp+=5){
+      const vol=50*temp/300, x=45+(temp-200)*(290/400), y=195-(vol-30)*1.7;
+      if(temp===200)pCtx2.moveTo(x,y); else pCtx2.lineTo(x,y);
+    }
+    pCtx2.stroke();
+    const x=45+(T-200)*(290/400), y=195-(V-30)*1.7;
+    pCtx2.fillStyle="#e74c3c"; pCtx2.beginPath(); pCtx2.arc(x,y,6,0,Math.PI*2); pCtx2.fill();
+  }
+  pSlider.addEventListener("input",drawIsoP); drawIsoP();
+
+  // Izoxorik
+  const vCanvas=get("isoVCanvas"), vCtx=vCanvas.getContext("2d"), vSlider=get("isoVT");
+  function drawIsoV(){
+    const T=+vSlider.value, P=T/300;
+    get("isoVTVal").textContent=T;
+    get("isoVP").textContent=P.toFixed(2);
+    get("isoVPT").textContent=(P/T).toFixed(5);
+    drawAxes(vCtx,360,230,"T","P");
+    vCtx.strokeStyle="#8e44ad"; vCtx.lineWidth=3; vCtx.beginPath();
+    for(let temp=200;temp<=600;temp+=5){
+      const press=temp/300, x=45+(temp-200)*(290/400), y=195-(press-.5)*95;
+      if(temp===200)vCtx.moveTo(x,y); else vCtx.lineTo(x,y);
+    }
+    vCtx.stroke();
+    const x=45+(T-200)*(290/400), y=195-(P-.5)*95;
+    vCtx.fillStyle="#e74c3c"; vCtx.beginPath(); vCtx.arc(x,y,6,0,Math.PI*2); vCtx.fill();
+  }
+  vSlider.addEventListener("input",drawIsoV); drawIsoV();
+})();
+
+</script>
+</body>
+</html>
